@@ -4,13 +4,11 @@ module.exports = function (grunt) {
 
   var fs = require("fs"),
     Util = {
-
       jsBasePath: '_src/',
       parseBasePath: '_parse/',
       cssBasePath: 'themes/default/_css/',
 
       fetchScripts: function (readFile, basePath) {
-
         var sources = fs.readFileSync(readFile);
         sources = /\[([^\]]+\.js'[^\]]+)\]/.exec(sources);
         sources = sources[1].replace(/\/\/.*\n/g, '\n').replace(/'|"|\n|\t|\s/g, '');
@@ -18,25 +16,19 @@ module.exports = function (grunt) {
         sources.forEach(function (filepath, index) {
           sources[index] = basePath + filepath;
         });
-
         return sources;
       },
 
       fetchStyles: function () {
-
         var sources = fs.readFileSync(this.cssBasePath + "ueditor.css"),
           filepath = null,
           pattern = /@import\s+([^;]+)*;/g,
           src = [];
-
         while (filepath = pattern.exec(sources)) {
           src.push(this.cssBasePath + filepath[1].replace(/'|"/g, ""));
         }
-
         return src;
-
       }
-
     },
     packageJson = grunt.file.readJSON('package.json'),
     server = grunt.option('server') || 'php',
@@ -46,12 +38,9 @@ module.exports = function (grunt) {
 
   //init
   (function () {
-
     server = typeof server === "string" ? server.toLowerCase() : 'php';
     encode = typeof encode === "string" ? encode.toLowerCase() : 'utf8';
-
     disDir = 'dist/' + encode + '-' + server + '/';
-
   })();
 
   grunt.initConfig({
@@ -111,10 +100,8 @@ module.exports = function (grunt) {
       base: {
         files: [
           {
-
             src: ['*.html', 'themes/iframe.css', 'themes/default/dialogbase.css', 'themes/default/images/**', 'dialogs/**', 'lang/**', 'third-party/**'],
             dest: disDir
-
           }
         ]
       },
@@ -127,44 +114,33 @@ module.exports = function (grunt) {
         ]
       },
       php: {
-
         expand: true,
         src: 'php/**',
         dest: disDir
-
       },
       asp: {
-
         expand: true,
         src: 'asp/**',
         dest: disDir
-
       },
       jsp: {
-
         expand: true,
         src: 'jsp/**',
         dest: disDir
-
       },
       net: {
-
         expand: true,
         src: 'net/**',
         dest: disDir
-
       }
     },
     transcoding: {
-
       options: {
         charset: encode
       },
       src: [disDir + '**/*.html', disDir + '**/*.js', disDir + '**/*.css', disDir + '**/*.json', disDir + '**/*.jsp', disDir + '**/*.asp']
-
     },
     replace: {
-
       fileEncode: {
         src: [disDir + '**/*.html', disDir + 'dialogs/**/*.js', disDir + '**/*.css', disDir + '**/*.php', disDir + '**/*.jsp', disDir + '**/*.ashx', disDir + '**/*.asp'],
         overwrite: true,
@@ -225,48 +201,34 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask('default', 'UEditor build', function () {
-
     var tasks = ['concat', 'cssmin', 'uglify', 'copy:base', 'copy:' + server, 'copy:demo', 'replace:demo', 'clean'];
-
     if (encode === 'gbk') {
       tasks.push('replace:fileEncode');
       if (server === 'asp') {
         tasks.push('replace:gbkasp');
       }
     }
-
     tasks.push('transcoding');
-
     //config修改
     updateConfigFile();
-
     grunt.task.run(tasks);
-
   });
 
-
   function updateConfigFile() {
-
     var filename = 'ueditor.config.js',
       file = grunt.file.read(filename),
       path = server + "/",
       suffix = server === "net" ? ".ashx" : "." + server;
-
     file = file.replace(/php\//ig, path).replace(/\.php/ig, suffix);
-
     if (encode == 'gbk') {
       file = file.replace(/utf-8/gi, 'gbk');
     }
-
     //写入到dist
     if (grunt.file.write(disDir + filename, file)) {
-
       grunt.log.writeln('config file update success');
-
     } else {
       grunt.log.warn('config file update error');
     }
-
   }
 
 };
