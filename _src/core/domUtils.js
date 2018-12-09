@@ -25,6 +25,7 @@ function getDomNode(node, start, ltr, startFromChild, fn, guard) {
     }
     return tmpNode;
 }
+
 var attrFix = ie && browser.version < 9 ? {
         tabindex:"tabIndex",
         readonly:"readOnly",
@@ -48,6 +49,7 @@ var attrFix = ie && browser.version < 9 ? {
         'table-row' , 'table-column-group' , 'table-column' ,
         'table-cell' , 'table-caption'
     ]);
+
 var domUtils = dom.domUtils = {
     //节点常量
     NODE_ELEMENT:1,
@@ -2410,4 +2412,5 @@ var domUtils = dom.domUtils = {
     },
     fillHtml :  browser.ie11below ? '&nbsp;' : '<br/>'
 };
+
 var fillCharReg = new RegExp(domUtils.fillChar, 'g');
