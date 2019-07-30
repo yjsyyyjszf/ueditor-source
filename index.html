@@ -24,23 +24,19 @@
 <div class="display-area">这是展示区</div>
 
 <script type="text/javascript">
-  let editor = null;
-  const area = document.querySelector('.display-area');
+  const displayArea = document.querySelector('.display-area');
 
-  UE.getEditor('editor').ready(function () {
-    editor = this; // this指向编辑器实例
+  const opts = {
+    toolbars: [
+      ['radio', 'input', 'bracket', 'bold', 'italic', 'underline', 'indent', 'simpleupload', 'inserttable', 'formula', 'spechars', 'undo', 'redo']
+    ]
+  }
+  const editor = UE.getEditor('editor', opts);
+  
+  editor.ready(function() {
     editor.setContent('hello UE !');
-    editor.execCommand('inserthtml', '<div>666</div>');
-    area.textContent = editor.getContent();
-    var root = UE.htmlparser('<p><b>htmlparser</b></p>', true);
-    console.log(root);
-
-    editor.addListener('selectionchange', () => {
-      area.textContent = editor.selection.getText();
-      editor.execCommand('blod');
-    });
+    editor.focus(true);
   });
-
 </script>
 </body>
 </html>
