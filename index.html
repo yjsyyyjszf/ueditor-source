@@ -31,11 +31,20 @@
       ['radio', 'input', 'bracket', 'bold', 'italic', 'underline', 'indent', 'simpleupload', 'inserttable', 'formula', 'spechars', 'undo', 'redo']
     ]
   }
-  const editor = UE.getEditor('editor', opts);
-  
-  editor.ready(function() {
-    editor.setContent('hello UE !');
-    editor.focus(true);
+  const me = UE.getEditor('editor', opts);
+
+  me.ready(function() {
+    me.setContent('hello UE !');
+    me.focus(true);
+
+    me.addListener('aftershowcontextmenu', (type, menu) => {
+      console.log(type, menu);
+    });
+
+    // contextmenu
+     me.addListener('contextmenu', (type, menu) => {
+      console.log(type, menu);
+    });
   });
 </script>
 </body>
