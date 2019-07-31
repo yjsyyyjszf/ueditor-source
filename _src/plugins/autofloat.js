@@ -6,7 +6,7 @@
  *  modified by chengchao01
  *  注意： 引入此功能后，在IE6下会将body的背景图片覆盖掉！
  */
-UE.plugins['autofloat'] = function () {
+UE.plugins['autofloat'] = function() {
   var me = this,
     lang = me.getLang();
   me.setOpt({
@@ -14,7 +14,6 @@ UE.plugins['autofloat'] = function () {
   });
   var optsAutoFloatEnabled = me.options.autoFloatEnabled !== false,
     topOffset = me.options.topOffset;
-
 
   //如果不固定toolbar的位置，则直接退出
   if (!optsAutoFloatEnabled) {
@@ -40,9 +39,10 @@ UE.plugins['autofloat'] = function () {
 
   var bakCssText,
     placeHolder = document.createElement('div'),
-    toolbarBox, orgTop,
+    toolbarBox,
+    orgTop,
     getPosition,
-    flag = true;   //ie7模式下需要偏移
+    flag = true; //ie7模式下需要偏移
   function setFloating() {
     var toobarBoxPos = domUtils.getXY(toolbarBox),
       origalFloat = domUtils.getComputedStyle(toolbarBox, 'position'),
@@ -54,16 +54,26 @@ UE.plugins['autofloat'] = function () {
       if (toolbarBox.style.position != 'absolute') {
         toolbarBox.style.position = 'absolute';
       }
-      toolbarBox.style.top = (document.body.scrollTop || document.documentElement.scrollTop) - orgTop + topOffset + 'px';
+      toolbarBox.style.top =
+        (document.body.scrollTop || document.documentElement.scrollTop) -
+        orgTop +
+        topOffset +
+        'px';
     } else {
       if (browser.ie7Compat && flag) {
         flag = false;
-        toolbarBox.style.left = domUtils.getXY(toolbarBox).x - document.documentElement.getBoundingClientRect().left + 2 + 'px';
+        toolbarBox.style.left =
+          domUtils.getXY(toolbarBox).x -
+          document.documentElement.getBoundingClientRect().left +
+          2 +
+          'px';
       }
       if (toolbarBox.style.position != 'fixed') {
         toolbarBox.style.position = 'fixed';
-        toolbarBox.style.top = topOffset + "px";
-        ((origalFloat == 'absolute' || origalFloat == 'relative') && parseFloat(origalLeft)) && (toolbarBox.style.left = toobarBoxPos.x + 'px');
+        toolbarBox.style.top = topOffset + 'px';
+        (origalFloat == 'absolute' || origalFloat == 'relative') &&
+          parseFloat(origalLeft) &&
+          (toolbarBox.style.left = toobarBoxPos.x + 'px');
       }
     }
   }
@@ -87,16 +97,20 @@ UE.plugins['autofloat'] = function () {
     }
   }
 
-  var defer_updateFloating = utils.defer(function () {
-    updateFloating();
-  }, browser.ie ? 200 : 100, true);
+  var defer_updateFloating = utils.defer(
+    function() {
+      updateFloating();
+    },
+    browser.ie ? 200 : 100,
+    true
+  );
 
-  me.addListener('destroy', function () {
+  me.addListener('destroy', function() {
     domUtils.un(window, ['scroll', 'resize'], updateFloating);
     me.removeListener('keydown', defer_updateFloating);
   });
 
-  me.addListener('ready', function () {
+  me.addListener('ready', function() {
     if (checkHasUI(me)) {
       //加载了ui组件，但在new时，没有加载ui，导致编辑器实例上没有ui类，所以这里做判断
       if (!me.ui) {
@@ -113,27 +127,26 @@ UE.plugins['autofloat'] = function () {
       domUtils.on(window, ['scroll', 'resize'], updateFloating);
       me.addListener('keydown', defer_updateFloating);
 
-      me.addListener('beforefullscreenchange', function (t, enabled) {
+      me.addListener('beforefullscreenchange', function(t, enabled) {
         if (enabled) {
           unsetFloating();
         }
       });
-      me.addListener('fullscreenchanged', function (t, enabled) {
+      me.addListener('fullscreenchanged', function(t, enabled) {
         if (!enabled) {
           updateFloating();
         }
       });
-      me.addListener('sourcemodechanged', function (t, enabled) {
-        setTimeout(function () {
+      me.addListener('sourcemodechanged', function(t, enabled) {
+        setTimeout(function() {
           updateFloating();
         }, 0);
       });
-      me.addListener("clearDoc", function () {
-        setTimeout(function () {
+      me.addListener('clearDoc', function() {
+        setTimeout(function() {
           updateFloating();
         }, 0);
-
-      })
+      });
     }
   });
 };

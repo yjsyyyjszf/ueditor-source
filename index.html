@@ -30,10 +30,10 @@
     toolbars: [
       ['radio', 'input', 'bracket', 'bold', 'italic', 'underline', 'indent', 'simpleupload', 'inserttable', 'formula', 'spechars', 'undo', 'redo']
     ]
-  }
+  };
   const me = UE.getEditor('editor', opts);
 
-  me.ready(function() {
+  me.ready(function () {
     me.setContent('hello UE !');
     me.focus(true);
 
@@ -42,8 +42,8 @@
     });
 
     // contextmenu
-     me.addListener('contextmenu', (type, menu) => {
-      console.log(type, menu);
+    me.addListener('contextmenu', (type, evt) => {
+      console.log(type, evt);
     });
   });
 </script>

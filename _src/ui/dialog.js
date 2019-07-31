@@ -2,131 +2,140 @@
 ///import uicore
 ///import ui/mask.js
 ///import ui/button.js
-(function (){
+(function() {
     var utils = baidu.editor.utils,
         domUtils = baidu.editor.dom.domUtils,
         uiUtils = baidu.editor.ui.uiUtils,
         Mask = baidu.editor.ui.Mask,
         UIBase = baidu.editor.ui.UIBase,
         Button = baidu.editor.ui.Button,
-        Dialog = baidu.editor.ui.Dialog = function (options){
-            if(options.name){
+        Dialog = (baidu.editor.ui.Dialog = function(options) {
+            if (options.name) {
                 var name = options.name;
                 var cssRules = options.cssRules;
-                if(!options.className){
-                    options.className =  'edui-for-' + name;
+                if (!options.className) {
+                    options.className = 'edui-for-' + name;
                 }
-                if(cssRules){
-                    options.cssRules = '.edui-default .edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
+                if (cssRules) {
+                    options.cssRules = '.edui-default .edui-for-' + name + ' .edui-dialog-content  {' + cssRules + '}';
                 }
             }
-            this.initOptions(utils.extend({
-                autoReset: true,
-                draggable: true,
-                onok: function (){},
-                oncancel: function (){},
-                onclose: function (t, ok){
-                    return ok ? this.onok() : this.oncancel();
-                },
-                //是否控制dialog中的scroll事件， 默认为不阻止
-                holdScroll: false
-            },options));
+            this.initOptions(
+                utils.extend(
+                    {
+                        autoReset: true,
+                        draggable: true,
+                        onok: function() {},
+                        oncancel: function() {},
+                        onclose: function(t, ok) {
+                            return ok ? this.onok() : this.oncancel();
+                        },
+                        //是否控制dialog中的scroll事件， 默认为不阻止
+                        holdScroll: false,
+                    },
+                    options,
+                ),
+            );
             this.initDialog();
-        };
+        });
     var modalMask;
     var dragMask;
     var activeDialog;
     Dialog.prototype = {
         draggable: false,
         uiName: 'dialog',
-        initDialog: function (){
+        initDialog: function() {
             var me = this,
-                theme=this.editor.options.theme;
-            if(this.cssRules){
-                utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
+                theme = this.editor.options.theme;
+            if (this.cssRules) {
+                utils.cssRule('edui-customize-' + this.name + '-style', this.cssRules);
             }
             this.initUIBase();
-            this.modalMask = (modalMask || (modalMask = new Mask({
-                className: 'edui-dialog-modalmask',
-                theme:theme,
-                onclick: function (){
-                    activeDialog && activeDialog.close(false);
-                }
-            })));
-            this.dragMask = (dragMask || (dragMask = new Mask({
-                className: 'edui-dialog-dragmask',
-                theme:theme
-            })));
+            this.modalMask =
+                modalMask ||
+                (modalMask = new Mask({
+                    className: 'edui-dialog-modalmask',
+                    theme: theme,
+                    onclick: function() {
+                        activeDialog && activeDialog.close(false);
+                    },
+                }));
+            this.dragMask =
+                dragMask ||
+                (dragMask = new Mask({
+                    className: 'edui-dialog-dragmask',
+                    theme: theme,
+                }));
             this.closeButton = new Button({
                 className: 'edui-dialog-closebutton',
                 title: me.closeDialog,
-                theme:theme,
-                onclick: function (){
+                theme: theme,
+                onclick: function() {
                     me.close(false);
-                }
+                },
             });
 
             this.fullscreen && this.initResizeEvent();
 
             if (this.buttons) {
-                for (var i=0; i<this.buttons.length; i++) {
+                for (var i = 0; i < this.buttons.length; i++) {
                     if (!(this.buttons[i] instanceof Button)) {
-                        this.buttons[i] = new Button(utils.extend(this.buttons[i],{
-                            editor : this.editor
-                        },true));
+                        this.buttons[i] = new Button(
+                            utils.extend(
+                                this.buttons[i],
+                                {
+                                    editor: this.editor,
+                                },
+                                true,
+                            ),
+                        );
                     }
                 }
             }
         },
-        initResizeEvent: function () {
-
+        initResizeEvent: function() {
             var me = this;
 
-            domUtils.on( window, "resize", function () {
-
-                if ( me._hidden || me._hidden === undefined ) {
+            domUtils.on(window, 'resize', function() {
+                if (me._hidden || me._hidden === undefined) {
                     return;
                 }
 
-                if ( me.__resizeTimer ) {
-                    window.clearTimeout( me.__resizeTimer );
+                if (me.__resizeTimer) {
+                    window.clearTimeout(me.__resizeTimer);
                 }
 
-                me.__resizeTimer = window.setTimeout( function () {
-
+                me.__resizeTimer = window.setTimeout(function() {
                     me.__resizeTimer = null;
 
                     var dialogWrapNode = me.getDom(),
                         contentNode = me.getDom('content'),
-                        wrapRect = UE.ui.uiUtils.getClientRect( dialogWrapNode ),
-                        contentRect = UE.ui.uiUtils.getClientRect( contentNode ),
+                        wrapRect = UE.ui.uiUtils.getClientRect(dialogWrapNode),
+                        contentRect = UE.ui.uiUtils.getClientRect(contentNode),
                         vpRect = uiUtils.getViewportRect();
 
-                    contentNode.style.width = ( vpRect.width - wrapRect.width + contentRect.width ) + "px";
-                    contentNode.style.height = ( vpRect.height - wrapRect.height + contentRect.height ) + "px";
+                    contentNode.style.width = vpRect.width - wrapRect.width + contentRect.width + 'px';
+                    contentNode.style.height = vpRect.height - wrapRect.height + contentRect.height + 'px';
 
-                    dialogWrapNode.style.width = vpRect.width + "px";
-                    dialogWrapNode.style.height = vpRect.height + "px";
+                    dialogWrapNode.style.width = vpRect.width + 'px';
+                    dialogWrapNode.style.height = vpRect.height + 'px';
 
-                    me.fireEvent( "resize" );
-
-                }, 100 );
-
-            } );
-
+                    me.fireEvent('resize');
+                }, 100);
+            });
         },
-        fitSize: function (){
+        fitSize: function() {
             var popBodyEl = this.getDom('body');
-//            if (!(baidu.editor.browser.ie && baidu.editor.browser.version == 7)) {
-//                uiUtils.removeStyle(popBodyEl, 'width');
-//                uiUtils.removeStyle(popBodyEl, 'height');
-//            }
+            //            if (!(baidu.editor.browser.ie && baidu.editor.browser.version == 7)) {
+            //                uiUtils.removeStyle(popBodyEl, 'width');
+            //                uiUtils.removeStyle(popBodyEl, 'height');
+            //            }
             var size = this.mesureSize();
             popBodyEl.style.width = size.width + 'px';
             popBodyEl.style.height = size.height + 'px';
             return size;
         },
-        safeSetOffset: function (offset){
+        safeSetOffset: function(offset) {
             var me = this;
             var el = me.getDom();
             var vpRect = uiUtils.getViewportRect();
@@ -142,11 +151,10 @@
             el.style.left = Math.max(left, 0) + 'px';
             el.style.top = Math.max(top, 0) + 'px';
         },
-        showAtCenter: function (){
-
+        showAtCenter: function() {
             var vpRect = uiUtils.getViewportRect();
 
-            if ( !this.fullscreen ) {
+            if (!this.fullscreen) {
                 this.getDom().style.display = '';
                 var popSize = this.fitSize();
                 var titleHeight = this.getDom('titlebar').offsetHeight | 0;
@@ -155,7 +163,7 @@
                 var popEl = this.getDom();
                 this.safeSetOffset({
                     left: Math.max(left | 0, 0),
-                    top: Math.max(top | 0, 0)
+                    top: Math.max(top | 0, 0),
                 });
                 if (!domUtils.hasClass(popEl, 'edui-state-centered')) {
                     popEl.className += ' edui-state-centered';
@@ -164,76 +172,87 @@
                 var dialogWrapNode = this.getDom(),
                     contentNode = this.getDom('content');
 
-                dialogWrapNode.style.display = "block";
+                dialogWrapNode.style.display = 'block';
 
-                var wrapRect = UE.ui.uiUtils.getClientRect( dialogWrapNode ),
-                    contentRect = UE.ui.uiUtils.getClientRect( contentNode );
-                dialogWrapNode.style.left = "-100000px";
+                var wrapRect = UE.ui.uiUtils.getClientRect(dialogWrapNode),
+                    contentRect = UE.ui.uiUtils.getClientRect(contentNode);
+                dialogWrapNode.style.left = '-100000px';
 
-                contentNode.style.width = ( vpRect.width - wrapRect.width + contentRect.width ) + "px";
-                contentNode.style.height = ( vpRect.height - wrapRect.height + contentRect.height ) + "px";
+                contentNode.style.width = vpRect.width - wrapRect.width + contentRect.width + 'px';
+                contentNode.style.height = vpRect.height - wrapRect.height + contentRect.height + 'px';
 
-                dialogWrapNode.style.width = vpRect.width + "px";
-                dialogWrapNode.style.height = vpRect.height + "px";
+                dialogWrapNode.style.width = vpRect.width + 'px';
+                dialogWrapNode.style.height = vpRect.height + 'px';
                 dialogWrapNode.style.left = 0;
 
                 //保存环境的overflow值
                 this._originalContext = {
                     html: {
                         overflowX: document.documentElement.style.overflowX,
-                        overflowY: document.documentElement.style.overflowY
+                        overflowY: document.documentElement.style.overflowY,
                     },
                     body: {
                         overflowX: document.body.style.overflowX,
-                        overflowY: document.body.style.overflowY
-                    }
+                        overflowY: document.body.style.overflowY,
+                    },
                 };
 
                 document.documentElement.style.overflowX = 'hidden';
                 document.documentElement.style.overflowY = 'hidden';
                 document.body.style.overflowX = 'hidden';
                 document.body.style.overflowY = 'hidden';
-
             }
 
             this._show();
         },
-        getContentHtml: function (){
+        getContentHtml: function() {
             var contentHtml = '';
             if (typeof this.content == 'string') {
                 contentHtml = this.content;
             } else if (this.iframeUrl) {
-                contentHtml = '<span id="'+ this.id +'_contmask" class="dialogcontmask"></span><iframe id="'+ this.id +
-                    '_iframe" class="%%-iframe" height="100%" width="100%" frameborder="0" src="'+ this.iframeUrl +'"></iframe>';
+                contentHtml =
+                    '<span id="' +
+                    this.id +
+                    '_contmask" class="dialogcontmask"></span><iframe id="' +
+                    this.id +
+                    '_iframe" class="%%-iframe" height="100%" width="100%" frameborder="0" src="' +
+                    this.iframeUrl +
+                    '"></iframe>';
             }
             return contentHtml;
         },
-        getHtmlTpl: function (){
+        getHtmlTpl: function() {
             var footHtml = '';
 
             if (this.buttons) {
                 var buff = [];
-                for (var i=0; i<this.buttons.length; i++) {
+                for (var i = 0; i < this.buttons.length; i++) {
                     buff[i] = this.buttons[i].renderHtml();
                 }
-                footHtml = '<div class="%%-foot">' +
-                     '<div id="##_buttons" class="%%-buttons">' + buff.join('') + '</div>' +
-                    '</div>';
+                footHtml = '<div class="%%-foot">' + '<div id="##_buttons" class="%%-buttons">' + buff.join('') + '</div>' + '</div>';
             }
 
-            return '<div id="##" class="%%"><div '+ ( !this.fullscreen ? 'class="%%"' : 'class="%%-wrap edui-dialog-fullscreen-flag"' ) +'><div id="##_body" class="%%-body">' +
+            return (
+                '<div id="##" class="%%"><div ' +
+                (!this.fullscreen ? 'class="%%"' : 'class="%%-wrap edui-dialog-fullscreen-flag"') +
+                '><div id="##_body" class="%%-body">' +
                 '<div class="%%-shadow"></div>' +
                 '<div id="##_titlebar" class="%%-titlebar">' +
                 '<div class="%%-draghandle" onmousedown="$$._onTitlebarMouseDown(event, this);">' +
-                 '<span class="%%-caption">' + (this.title || '') + '</span>' +
+                '<span class="%%-caption">' +
+                (this.title || '') +
+                '</span>' +
                 '</div>' +
                 this.closeButton.renderHtml() +
                 '</div>' +
-                '<div id="##_content" class="%%-content">'+ ( this.autoReset ? '' : this.getContentHtml()) +'</div>' +
+                '<div id="##_content" class="%%-content">' +
+                (this.autoReset ? '' : this.getContentHtml()) +
+                '</div>' +
                 footHtml +
-                '</div></div></div>';
+                '</div></div></div>'
+            );
         },
-        postRender: function (){
+        postRender: function() {
             // todo: 保持居中/记住上次关闭位置选项
             if (!this.modalMask.getDom()) {
                 this.modalMask.render();
@@ -244,19 +263,19 @@
                 this.dragMask.hide();
             }
             var me = this;
-            this.addListener('show', function (){
+            this.addListener('show', function() {
                 me.modalMask.show(this.getDom().style.zIndex - 2);
             });
-            this.addListener('hide', function (){
+            this.addListener('hide', function() {
                 me.modalMask.hide();
             });
             if (this.buttons) {
-                for (var i=0; i<this.buttons.length; i++) {
+                for (var i = 0; i < this.buttons.length; i++) {
                     this.buttons[i].postRender();
                 }
             }
-            domUtils.on(window, 'resize', function (){
-                setTimeout(function (){
+            domUtils.on(window, 'resize', function() {
+                setTimeout(function() {
                     if (!me.isHidden()) {
                         me.safeSetOffset(uiUtils.getClientRect(me.getDom()));
                     }
@@ -264,83 +283,83 @@
             });
 
             //hold住scroll事件，防止dialog的滚动影响页面
-//            if( this.holdScroll ) {
-//
-//                if( !me.iframeUrl ) {
-//                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-//                        domUtils.preventDefault(e);
-//                    } );
-//                } else {
-//                    me.addListener('dialogafterreset', function(){
-//                        window.setTimeout(function(){
-//                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
-//
-//                            if( browser.ie ) {
-//
-//                                var timer = window.setInterval(function(){
-//
-//                                    if( iframeWindow.document && iframeWindow.document.body ) {
-//                                        window.clearInterval( timer );
-//                                        timer = null;
-//                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-//                                            domUtils.preventDefault(e);
-//                                        } );
-//                                    }
-//
-//                                }, 100);
-//
-//                            } else {
-//                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
-//                                    domUtils.preventDefault(e);
-//                                } );
-//                            }
-//
-//                        }, 1);
-//                    });
-//                }
-//
-//            }
+            //            if( this.holdScroll ) {
+            //
+            //                if( !me.iframeUrl ) {
+            //                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+            //                        domUtils.preventDefault(e);
+            //                    } );
+            //                } else {
+            //                    me.addListener('dialogafterreset', function(){
+            //                        window.setTimeout(function(){
+            //                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
+            //
+            //                            if( browser.ie ) {
+            //
+            //                                var timer = window.setInterval(function(){
+            //
+            //                                    if( iframeWindow.document && iframeWindow.document.body ) {
+            //                                        window.clearInterval( timer );
+            //                                        timer = null;
+            //                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+            //                                            domUtils.preventDefault(e);
+            //                                        } );
+            //                                    }
+            //
+            //                                }, 100);
+            //
+            //                            } else {
+            //                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+            //                                    domUtils.preventDefault(e);
+            //                                } );
+            //                            }
+            //
+            //                        }, 1);
+            //                    });
+            //                }
+            //
+            //            }
             this._hide();
         },
-        mesureSize: function (){
+        mesureSize: function() {
             var body = this.getDom('body');
             var width = uiUtils.getClientRect(this.getDom('content')).width;
             var dialogBodyStyle = body.style;
             dialogBodyStyle.width = width;
             return uiUtils.getClientRect(body);
         },
-        _onTitlebarMouseDown: function (evt, el){
+        _onTitlebarMouseDown: function(evt, el) {
             if (this.draggable) {
                 var rect;
                 var vpRect = uiUtils.getViewportRect();
                 var me = this;
                 uiUtils.startDrag(evt, {
-                    ondragstart: function (){
+                    ondragstart: function() {
                         rect = uiUtils.getClientRect(me.getDom());
                         me.getDom('contmask').style.visibility = 'visible';
                         me.dragMask.show(me.getDom().style.zIndex - 1);
                     },
-                    ondragmove: function (x, y){
+                    ondragmove: function(x, y) {
                         var left = rect.left + x;
                         var top = rect.top + y;
                         me.safeSetOffset({
                             left: left,
-                            top: top
+                            top: top,
                         });
                     },
-                    ondragstop: function (){
+                    ondragstop: function() {
                         me.getDom('contmask').style.visibility = 'hidden';
                         domUtils.removeClasses(me.getDom(), ['edui-state-centered']);
                         me.dragMask.hide();
-                    }
+                    },
                 });
             }
         },
-        reset: function (){
+        reset: function() {
             this.getDom('content').innerHTML = this.getContentHtml();
             this.fireEvent('dialogafterreset');
         },
-        _show: function (){
+        _show: function() {
             if (this._hidden) {
                 this.getDom().style.display = '';
 
@@ -351,10 +370,10 @@
                 baidu.editor.ui.uiUtils.getFixedLayer().style.zIndex = this.getDom().style.zIndex - 4;
             }
         },
-        isHidden: function (){
+        isHidden: function() {
             return this._hidden;
         },
-        _hide: function (){
+        _hide: function() {
             if (!this._hidden) {
                 var wrapNode = this.getDom();
                 wrapNode.style.display = 'none';
@@ -365,38 +384,36 @@
                 this.fireEvent('hide');
             }
         },
-        open: function (){
+        open: function() {
             if (this.autoReset) {
                 //有可能还没有渲染
-                try{
+                try {
                     this.reset();
-                }catch(e){
+                } catch (e) {
                     this.render();
-                    this.open()
+                    this.open();
                 }
             }
             this.showAtCenter();
             if (this.iframeUrl) {
                 try {
                     this.getDom('iframe').focus();
-                } catch(ex){}
+                } catch (ex) {}
             }
             activeDialog = this;
         },
-        _onCloseButtonClick: function (evt, el){
+        _onCloseButtonClick: function(evt, el) {
             this.close(false);
         },
-        close: function (ok){
+        close: function(ok) {
             if (this.fireEvent('close', ok) !== false) {
                 //还原环境
-                if ( this.fullscreen ) {
-
+                if (this.fullscreen) {
                     document.documentElement.style.overflowX = this._originalContext.html.overflowX;
                     document.documentElement.style.overflowY = this._originalContext.html.overflowY;
                     document.body.style.overflowX = this._originalContext.body.overflowX;
                     document.body.style.overflowY = this._originalContext.body.overflowY;
                     delete this._originalContext;
-
                 }
                 this._hide();
 
@@ -409,7 +426,7 @@
                     domUtils.remove(content);
                 }
             }
-        }
+        },
     };
     utils.inherits(Dialog, UIBase);
 })();
