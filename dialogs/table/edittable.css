@@ -1,4 +1,4 @@
-body{
+body {
     overflow: hidden;
     width: 540px;
 }
@@ -16,12 +16,12 @@ body{
 
 .wrapper .left {
     float: left;
-    margin-left: 10px;;
+    margin-left: 10px;
 }
 
 .wrapper .right {
     float: right;
-    border-left: 2px dotted #EDEDED;
+    border-left: 2px dotted #ededed;
     padding-left: 15px;
 }
 
@@ -35,7 +35,7 @@ body{
     font-weight: bold;
     padding: 5px 0;
     margin-bottom: 10px;
-    border-bottom: 1px solid #EDEDED;
+    border-bottom: 1px solid #ededed;
     font-size: 12px;
 }
 
@@ -43,16 +43,15 @@ body{
     list-style: none;
     overflow: hidden;
     clear: both;
-
 }
 
 .section li {
     float: left;
-    width: 120px;;
+    width: 120px;
 }
 
 .section .tone {
-    width: 80px;;
+    width: 80px;
 }
 
 .section .preview {
@@ -77,8 +76,8 @@ body{
 
 .section .preview th {
     border-style: solid;
-    border-color: #DDD;
+    border-color: #ddd;
     border-width: 2px 1px 1px 1px;
     height: 22px;
-    background-color: #F7F7F7;
+    background-color: #f7f7f7;
 }
