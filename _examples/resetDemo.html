@@ -29,7 +29,7 @@
 
   function simple() {
     if (editor) {
-      editor.setContent("编辑器内部变量已经被重置!");
+      editor.setContent('编辑器内部变量已经被重置!');
       editor.reset();
     }
   }
@@ -38,20 +38,20 @@
     editor.destroy();
     editor = null;
     clearInterval(timer);
-    var button = document.getElementById("destroy");
+    var button = document.getElementById('destroy');
 
-    button.value = "重新渲染";
+    button.value = '重新渲染';
     button.onclick = function () {
       editor = UE.getEditor('simple');
-      this.value = "销毁编辑器";
+      this.value = '销毁编辑器';
       this.onclick = destroy;
       timer = setInterval(setMsg, 100);
-    }
+    };
   }
 
   function setMsg() {
     if (editor && editor.undoManger) {
-      document.getElementById("txt").innerHTML = "编辑器当前保存了 <span style='color: red'> " + editor.undoManger.list.length + " </span>次操作";
+      document.getElementById('txt').innerHTML = '编辑器当前保存了 <span style=\'color: red\'> ' + editor.undoManger.list.length + ' </span>次操作';
     }
   }
 

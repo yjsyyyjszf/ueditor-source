@@ -50,8 +50,8 @@
   ue.ready(function () {
     //阻止工具栏的点击向上冒泡
     $(this.container).click(function (e) {
-      e.stopPropagation()
-    })
+      e.stopPropagation();
+    });
   });
   $('.content').click(function (e) {
     // 获取编辑器所在的DOM，插入到目标节点中（并更新内容）
@@ -64,9 +64,9 @@
     ue.reset();
     setTimeout(function () {
       ue.setContent(content);
-    }, 200)
+    }, 200);
     $(currentParnet).html(currentContent);
-  })
+  });
 </script>
 </body>
 </html>

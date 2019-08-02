@@ -18,10 +18,10 @@
 </script>
 <script type="text/javascript">
   //创建一个在选中的图片单击时添加边框的插件，其实质就是在baidu.editor.plugins塞进一个闭包
-  UE.plugins["addborder"] = function () {
+  UE.plugins['addborder'] = function () {
     var me = this;
     //创建一个改变图片边框的命令
-    me.commands["addborder"] = {
+    me.commands['addborder'] = {
       execCommand: function () {
         //获取当前选区
         var range = me.selection.getRange();
@@ -29,9 +29,9 @@
         if (!range.collapsed) {
           //图片判断
           var img = range.getClosedNode();
-          if (img && img.tagName == "IMG") {
+          if (img && img.tagName == 'IMG') {
             //点击切换图片边框
-            img.style.border = img.style.borderWidth == "5px" ? "1px" : "5px solid red";
+            img.style.border = img.style.borderWidth == '5px' ? '1px' : '5px solid red';
           }
         }
       }
@@ -39,15 +39,12 @@
     //注册一个触发命令的事件，同学们可以在任意地放绑定触发此命令的事件
     me.addListener('click', function () {
       setTimeout(function () {
-        me.execCommand("addborder");
-      })
+        me.execCommand('addborder');
+      });
 
     });
   };
-  var editor_a = UE.getEditor('myEditor');
+  var editor = UE.getEditor('myEditor');
 </script>
-
 </body>
-
-
 </html>

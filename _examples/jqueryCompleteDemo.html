@@ -16,19 +16,19 @@
         $('#form')[0].submit();
       });
       //--自动切换提交地址----
-      var version = ue.options.serverUrl || ue.options.imageUrl || "php",
+      var version = ue.options.serverUrl || ue.options.imageUrl || 'php',
         form = $('#form')[0];
 
       if (version.match(/php/)) {
-        form.action = "./server/getContent.php";
+        form.action = './server/getContent.php';
       } else if (version.match(/net/)) {
-        form.action = "./server/getContent.ashx";
+        form.action = './server/getContent.ashx';
       } else if (version.match(/jsp/)) {
-        form.action = "./server/getContent.jsp";
+        form.action = './server/getContent.jsp';
       } else if (version.match(/asp/)) {
-        form.action = "./server/getContent.asp";
+        form.action = './server/getContent.asp';
       }
-    })
+    });
   </script>
 </head>
 <body>

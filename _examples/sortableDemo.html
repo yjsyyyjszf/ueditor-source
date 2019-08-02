@@ -140,7 +140,7 @@
    */
   uParse('#content1', {
     rootPath: '../'
-  })
+  });
   uParse('#content2', {
     rootPath: '../',
     tableSortCompareFn: function (td1, td2) {
@@ -148,7 +148,7 @@
         value2 = td2.innerText || td2.textContent;
       return parseInt(value1) % 10 > parseInt(value2) % 10;
     }
-  })
+  });
 
 </script>
 

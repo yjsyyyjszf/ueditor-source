@@ -28,17 +28,17 @@
 
   //--自动切换提交地址----
   var doc = document,
-    version = editor.options.serverUrl || editor.options.imageUrl || "php",
-    form = doc.getElementById("form");
+    version = editor.options.serverUrl || editor.options.imageUrl || 'php',
+    form = doc.getElementById('form');
 
   if (version.match(/php/)) {
-    form.action = "./server/getContent.php";
+    form.action = './server/getContent.php';
   } else if (version.match(/net/)) {
-    form.action = "./server/getContent.ashx";
+    form.action = './server/getContent.ashx';
   } else if (version.match(/jsp/)) {
-    form.action = "./server/getContent.jsp";
+    form.action = './server/getContent.jsp';
   } else if (version.match(/asp/)) {
-    form.action = "./server/getContent.asp";
+    form.action = './server/getContent.asp';
   }
   //-----
 </script>

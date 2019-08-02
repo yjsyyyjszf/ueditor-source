@@ -84,7 +84,7 @@
     var i = -1;
     while (i++ < cmdName.length - 1) {
       var state = myeditor.queryCommandState(cmdName[i]);
-      $G(cmdName[i]).style.color = state == 1 ? "red" : "";
+      $G(cmdName[i]).style.color = state == 1 ? 'red' : '';
     }
     //依据当前光标所在的字体改变下拉列表的选中值
     i = -1;
@@ -92,8 +92,8 @@
       var fstate = myeditor.queryCommandValue(fontName[i]).toLowerCase();
       var fselect = $G(fontName[i]);
       for (var j = 0; j < fselect.options.length; j++) {
-        if (fselect.options[j].value.toLowerCase().indexOf(fstate.split(",")[0]) != -1) {
-          fselect.options[j].selected = "true";
+        if (fselect.options[j].value.toLowerCase().indexOf(fstate.split(',')[0]) != -1) {
+          fselect.options[j].selected = 'true';
         }
       }
     }
@@ -101,9 +101,9 @@
 
   //插入文本
   function insert() {
-    var insertTxt = "插入的文本";
-    insertTxt = prompt("插入的内容", insertTxt);
-    insertTxt && myeditor.execCommand("inserthtml", insertTxt);
+    var insertTxt = '插入的文本';
+    insertTxt = prompt('插入的内容', insertTxt);
+    insertTxt && myeditor.execCommand('inserthtml', insertTxt);
   }
 
   function execUnderline(cmd) {
